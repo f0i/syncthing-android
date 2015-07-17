@@ -50,10 +50,15 @@ public class DevicesAdapter extends ArrayAdapter<RestApi.Device>
         TextView download = (TextView) convertView.findViewById(R.id.download);
         TextView upload = (TextView) convertView.findViewById(R.id.upload);
 
-        String deviceId = getItem(position).deviceID;
-        RestApi.Connection conn = mConnections.get(deviceId);
+        RestApi.Device device = getItem(position);
+        RestApi.Connection conn = mConnections.get(device.deviceID);
 
-        name.setText(getItem(position).name);
+        // Check if device name is set, otherwise use device id as name
+        if(device.name.length() > 0 || device.deviceID == null) {
+            name.setText(device.name);
+        } else {
+            name.setText(device.deviceID.split("-")[0]);
+        }
         Resources r = getContext().getResources();
         if (conn != null) {
             if (conn.completion == 100) {
